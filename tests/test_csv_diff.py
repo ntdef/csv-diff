@@ -115,3 +115,11 @@ def test_tsv():
         "columns_added": [],
         "columns_removed": [],
     } == diff
+
+
+def test_empty():
+    diff = compare(
+        load_csv(io.StringIO(""), key="id"), load_csv(io.StringIO(TWO_TSV), key="id")
+    )
+    assert ["age", "id", "name"] == sorted(diff["columns_added"])
+    assert [{"age": "5", "id": "1", "name": "Cleo"}, {"age": "2", "id": "2", "name": "Pancakes"}] == diff["added"]

@@ -15,7 +15,7 @@ def load_csv(fp, key=None, dialect=None):
             # Oh well, we tried. Fallback to the default.
             pass
     fp = csv.reader(fp, dialect=(dialect or "excel"))
-    headings = next(fp)
+    headings = next(fp, [])
     rows = [dict(zip(headings, line)) for line in fp]
     if key:
         keyfn = lambda r: r[key]
@@ -61,8 +61,8 @@ def compare(previous, current, show_unchanged=False):
         "columns_removed": [],
     }
     # Have the columns changed?
-    previous_columns = set(next(iter(previous.values())).keys())
-    current_columns = set(next(iter(current.values())).keys())
+    previous_columns = set(next(iter(previous.values())).keys()) if previous else set()
+    current_columns = set(next(iter(current.values())).keys()) if current else set()
     ignore_columns = None
     if previous_columns != current_columns:
         result["columns_added"] = [
